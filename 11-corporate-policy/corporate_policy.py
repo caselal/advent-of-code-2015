@@ -47,9 +47,9 @@ def password_requirements_1(password):
     count_increasing_letters = 0
     for i in range(len(password) - 3):
         if ord(password[i+2]) - ord(password[i+1]) == 1 and ord(password[i+1]) - ord(password[i]) == 1:
-            count_increasing_letters += 1
+            return True
 
-    return count_increasing_letters > 0
+    return False
 
 # function to check if password contains the letters i, o, or l
 def password_requirements_2(password):
@@ -65,11 +65,12 @@ def password_requirements_3(password):
     for i in range(len((password)) - 1):
         if password[i] == password[i + 1]:
             substring = password[i] + password[i + 1]
+            all_substring_pairs[substring] = 1
 
-            if all_substring_pairs.get(substring) is None:
-                all_substring_pairs[substring] = i
+            if len(all_substring_pairs) > 1:
+                return True
 
-    return len(all_substring_pairs) > 1
+    return False
 
 # function to check if password meets all requirements
 def all_password_requirements(password):
@@ -77,11 +78,9 @@ def all_password_requirements(password):
 
 # generate next password meeting all password requirements
 next_password = increment_password(current_password)
-password_requirements_met = all_password_requirements(next_password)
 
-while password_requirements_met is False:
+while all_password_requirements(next_password) is False:
     next_password = increment_password(next_password)
-    password_requirements_met = all_password_requirements(next_password)
 
 print(next_password)
 
@@ -90,10 +89,8 @@ print(next_password)
 ###########
 current_password = next_password
 next_password = increment_password(current_password)
-password_requirements_met = all_password_requirements(next_password)
 
-while password_requirements_met is False:
+while all_password_requirements(next_password) is False:
     next_password = increment_password(next_password)
-    password_requirements_met = all_password_requirements(next_password)
 
 print(next_password)

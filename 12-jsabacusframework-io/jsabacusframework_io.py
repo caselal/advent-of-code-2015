@@ -18,17 +18,11 @@ def integer_sum(input):
     sum = 0
     if type(input) is dict:
         for value in input.values():
-            if type(value) is int:
-                sum += value
-            elif type(value) is dict or type(value) is list:
-                sum += integer_sum(value)
+           sum += integer_sum(value)
 
     elif type(input) is list:
         for element in input:
-            if type(element) is int:
-                sum += element
-            elif type(element) is dict or type(element) is list:
-                sum += integer_sum(element)
+            sum += integer_sum(element)
 
     elif type(input) is int:
         sum += input
@@ -48,28 +42,11 @@ def integer_sum_excluding_red(input):
             pass
         else:
             for value in input.values():
-                if type(value) is int:
-                    sum += value
-                elif type(value) is dict:
-                    if 'red' in value.values():
-                        pass
-                    else:
-                        sum += integer_sum_excluding_red(value)
-                elif type(value) is list:
-                    sum += integer_sum_excluding_red(value)
+                sum += integer_sum_excluding_red(value)
 
     elif type(input) is list:
         for element in input:
-            if type(element) is int:
-                sum += element
-            elif type(element) is dict:
-                if 'red' in element.values():
-                    pass
-                else:
-                    sum += integer_sum_excluding_red(element)
-
-            elif type(element) is list:
-                sum += integer_sum_excluding_red(element)
+            sum += integer_sum_excluding_red(element)
 
     elif type(input) is int:
         sum += input

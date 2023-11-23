@@ -38,10 +38,10 @@ print(integer_sum(json_data))
 def integer_sum_excluding_red(input):
     sum = 0
     if type(input) is dict:
-        if 'red' in input.values():
-            pass
-        else:
-            for value in input.values():
+        for value in input.values():
+            if value == 'red':
+                return 0
+            else:
                 sum += integer_sum_excluding_red(value)
 
     elif type(input) is list:

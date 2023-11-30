@@ -20,7 +20,16 @@ def reindeer_info(info):
     return reindeer, speed, flying_duration, resting_period
 
 
-t = 2503
+def distance_traveled_calculation(time, speed, duration, rest):
+    length_of_cycle = duration + rest
+    number_of_cycles = math.floor(time / length_of_cycle)
+    distance = speed * (
+        (duration * number_of_cycles) + min(duration, time % length_of_cycle)
+    )
+    return length_of_cycle, number_of_cycles, distance
+
+
+race_length = 2503
 
 ###########
 # Part One
@@ -29,21 +38,18 @@ distances_traveled = {}
 
 for description in reindeer_descriptions:
     reindeer, speed, flying_duration, resting_period = reindeer_info(description)
-    cycle_length = flying_duration + resting_period
-    cycles = math.floor(t / cycle_length)
-    distance_traveled = speed * (
-        (flying_duration * cycles) + min(flying_duration, t % cycle_length)
+    cycle_length, cycles, distance_traveled = distance_traveled_calculation(
+        race_length, speed, flying_duration, resting_period
     )
     distances_traveled[reindeer] = distance_traveled
 
-# print(distances_traveled)
 print(max(zip(distances_traveled.values(), distances_traveled.keys())))
+
 
 ###########
 # Part Two
 ###########s
 reindeer_scoring = {}
-
 for description in reindeer_descriptions:
     reindeer, speed, flying_duration, resting_period = reindeer_info(description)
     reindeer_scoring[reindeer] = {
@@ -57,20 +63,17 @@ for description in reindeer_descriptions:
 all_reindeer = list(reindeer_scoring.keys())
 distance_tracked = {}
 
-for s in range(1, t + 1):
+for t in range(1, race_length + 1):
     for reindeer in all_reindeer:
         reindeer_dict = reindeer_scoring.get(reindeer)
-        cycle_length = reindeer_dict.get("flying_duration") + reindeer_dict.get(
-            "resting_period"
+        cycle_length, cycles, distance_traveled = distance_traveled_calculation(
+            t,
+            reindeer_dict.get("speed"),
+            reindeer_dict.get("flying_duration"),
+            reindeer_dict.get("resting_period"),
         )
-        cycles = math.floor(s / cycle_length)
-
-        if (s - (cycle_length * cycles) > 0) and (
-            s - (cycle_length * cycles) <= reindeer_dict.get("flying_duration")
-        ):
-            reindeer_dict["distance_traveled"] += reindeer_dict.get("speed")
-
-        distance_tracked[reindeer] = reindeer_dict["distance_traveled"]
+        reindeer_dict["distance_traveled"] = distance_traveled
+        distance_tracked[reindeer] = distance_traveled
 
     max_distance = max(zip(distance_tracked.values(), distance_tracked.keys()))[0]
     lead_reindeer = [
@@ -82,7 +85,7 @@ for s in range(1, t + 1):
 all_reindeer_points = {}
 for reindeer in all_reindeer:
     all_reindeer_points[reindeer] = reindeer_scoring.get(reindeer).get("points")
+
 max_points = max(zip(all_reindeer_points.values(), all_reindeer_points.keys()))[0]
 
-# print(reindeer_scoring)
 print(max_points)

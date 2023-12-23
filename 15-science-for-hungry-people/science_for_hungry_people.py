@@ -11,9 +11,10 @@ with open("input.txt", "r") as input:
 
 
 def parse_ingredients(input_string):
+    string = input_string.split(": ")
     ingredient_properties = {}
-    ingredient = input_string.split(":")[0]
-    properties = input_string.split(": ")[1].split(", ")
+    ingredient = string[0]
+    properties = string[1].split(", ")
 
     for property in properties:
         ingredient_properties[property.split(" ")[0]] = int(property.split(" ")[1])

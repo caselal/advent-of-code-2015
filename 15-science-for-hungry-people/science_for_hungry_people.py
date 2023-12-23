@@ -23,9 +23,6 @@ def parse_ingredients(input_string):
 
 total_tsps = 100
 
-###########
-# Part One
-###########
 ingredients = {}
 for string in puzzle_input:
     ingredient, properties = parse_ingredients(string)
@@ -38,6 +35,9 @@ all_tsp_combinations = [
     if sum(permutation) == total_tsps
 ]
 
+###########
+# Part One
+###########
 best_total_score = 0
 for tsps in all_tsp_combinations:
     recipe_capacity, recipe_durability, recipe_flavor, recipe_texture = 0, 0, 0, 0
@@ -61,5 +61,40 @@ for tsps in all_tsp_combinations:
         )
 
     best_total_score = max(best_total_score, recipe_total_score)
+
+print(best_total_score)
+
+###########
+# Part Two
+###########
+best_total_score = 0
+for tsps in all_tsp_combinations:
+    (
+        recipe_capacity,
+        recipe_durability,
+        recipe_flavor,
+        recipe_texture,
+        recipe_calories,
+    ) = (0, 0, 0, 0, 0)
+
+    for i, ingredient in enumerate(ingredients.keys()):
+        recipe_capacity += ingredients.get(ingredient).get("capacity") * tsps[i]
+        recipe_durability += ingredients.get(ingredient).get("durability") * tsps[i]
+        recipe_flavor += ingredients.get(ingredient).get("flavor") * tsps[i]
+        recipe_texture += ingredients.get(ingredient).get("texture") * tsps[i]
+        recipe_calories += ingredients.get(ingredient).get("calories") * tsps[i]
+    if (
+        recipe_capacity < 0
+        or recipe_durability < 0
+        or recipe_flavor < 0
+        or recipe_texture < 0
+    ):
+        recipe_total_score = 0
+    else:
+        recipe_total_score = (
+            recipe_capacity * recipe_durability * recipe_flavor * recipe_texture
+        )
+    if recipe_calories == 500:
+        best_total_score = max(best_total_score, recipe_total_score)
 
 print(best_total_score)
